@@ -25,7 +25,8 @@ import java.util.concurrent.TimeUnit;
 public class stateController {
     private static final Logger log = LoggerFactory.getLogger(stateController.class);
     private static final ObjectMapper JSON_SERIALIZER = new ObjectMapper();
-    private static final String DAPR_STATE_STORE = "statestore";
+    private static final String DAPR_STATE_STORE_LOCAL = "statestore";
+    private static final String DAPR_STATE_STORE_AZURE = "statestore-azure";
 
     @GetMapping("/local")
     public ResponseEntity<String> getLocal() throws JsonProcessingException {
@@ -41,15 +42,15 @@ public class stateController {
                 order.setOrderId(orderId);
 
                 // Guardamos estado dentro del store
-                client.saveState(DAPR_STATE_STORE, String.valueOf(orderId), order).block();
+                client.saveState(DAPR_STATE_STORE_LOCAL, String.valueOf(orderId), order).block();
                 globalResponse += "Saving Order: " + order.getOrderId() + " ------ ";
 
                 // Obtenemos el estado del store
-                State<Order> response = client.getState(DAPR_STATE_STORE, String.valueOf(orderId), Order.class).block();
+                State<Order> response = client.getState(DAPR_STATE_STORE_LOCAL, String.valueOf(orderId), Order.class).block();
                 globalResponse += "Getting Order: " + response.getValue().getOrderId() + " ------ ";
 
                 // Borramos estado del store
-                client.deleteState(DAPR_STATE_STORE, String.valueOf(orderId)).block();
+                client.deleteState(DAPR_STATE_STORE_LOCAL, String.valueOf(orderId)).block();
                 globalResponse += "Deleting Order: " + orderId  + " ------ ";
                 TimeUnit.MILLISECONDS.sleep(100);
             }
@@ -63,4 +64,42 @@ public class stateController {
         ResponseEntity response = new ResponseEntity<>(globalResponse, HttpStatus.OK);
         return response;
     }
+
+    @GetMapping("/azure")
+    public ResponseEntity<String> getAzure() throws JsonProcessingException {
+        log.info("-----------------------------------_----------------------------- CALLING AZURE COSMOSDB.");
+
+        LocalDateTime instance = LocalDateTime.now();
+        String globalResponse = instance + "\n";
+
+        try (DaprClient client = new DaprClientBuilder().build()) {
+            for (int i = 1; i <= 10; i++) {
+                int orderId = i;
+                Order order = new Order();
+                order.setOrderId(orderId);
+
+                // Guardamos estado dentro del store
+                client.saveState(DAPR_STATE_STORE_AZURE, String.valueOf(orderId), order).block();
+                globalResponse += "Saving Order: " + order.getOrderId() + " ------ ";
+
+                // Obtenemos el estado del store
+                State<Order> response = client.getState(DAPR_STATE_STORE_AZURE, String.valueOf(orderId), Order.class).block();
+                globalResponse += "Getting Order: " + response.getValue().getOrderId() + " ------ ";
+
+                // Borramos estado del store
+                client.deleteState(DAPR_STATE_STORE_AZURE, String.valueOf(orderId)).block();
+                globalResponse += "Deleting Order: " + orderId  + " ------ ";
+                TimeUnit.MILLISECONDS.sleep(100);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        LocalDateTime instance2 = LocalDateTime.now();
+        globalResponse += instance2 + " ------ ";
+
+        ResponseEntity response = new ResponseEntity<>(globalResponse, HttpStatus.OK);
+        return response;
+    }
+
 }
