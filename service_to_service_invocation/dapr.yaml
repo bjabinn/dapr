@@ -1,9 +1,0 @@
-version: 1
-apps:
-  - appDirPath: ./enviaPedidos/
-    appID: envia-pedidos    
-    command: ["java", "-jar", "target/dapr-service2service-enviaPedidos-0.0.1-SNAPSHOT.jar"]
-  - appDirPath: ./procesaPedidos/
-    appID: procesa-pedidos
-    appPort: 9001
-    command: ["java", "-jar", "target/CheckoutService-0.0.1-SNAPSHOT.jar"]
