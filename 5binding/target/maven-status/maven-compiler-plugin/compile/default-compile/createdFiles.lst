@@ -1,0 +1,4 @@
+com\viewnext\controller\BindingController.class
+com\viewnext\controller\models\Order.class
+com\viewnext\BatchProcessingServiceApplication.class
+com\viewnext\controller\models\Orders.class
