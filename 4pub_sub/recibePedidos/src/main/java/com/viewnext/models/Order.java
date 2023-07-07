@@ -1,4 +1,4 @@
-package com.viewnext.dapr.models;
+package com.viewnext.models;
 
 import lombok.Getter;
 import lombok.Setter;

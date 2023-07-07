@@ -1,4 +1,4 @@
-mvn clean install -DskipTests && dapr run --app-id envia-pedidos-pub --resources-path .\components -- java -jar target/dapr-pub_sub-enviaPedidos-0.0.1-SNAPSHOT.jar
+mvn clean install -DskipTests && dapr run --app-port 8081 --app-id envia-pedidos-pub --resources-path .\components -- java -jar target/dapr-pub_sub-enviaPedidos-0.0.1-SNAPSHOT.jar
 
 http://localhost:9411/zipkin/
 

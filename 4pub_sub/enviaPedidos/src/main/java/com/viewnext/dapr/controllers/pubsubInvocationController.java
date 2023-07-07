@@ -3,7 +3,6 @@ package com.viewnext.dapr.controllers;
 import com.viewnext.dapr.models.Order;
 import io.dapr.client.DaprClient;
 import io.dapr.client.DaprClientBuilder;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -12,12 +11,9 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
 
 @RestController
@@ -26,11 +22,9 @@ import java.util.concurrent.TimeUnit;
 public class pubsubInvocationController {
     private static final Logger log = LoggerFactory.getLogger(pubsubInvocationController.class);
 
-
-
     @GetMapping("/enviaPedido")
-    public ResponseEntity<String> enviaPedidoLocal() throws IOException, InterruptedException {
-        log.info("-----------------------------------_-----------------------------PUB SUB ENVIANDO PEDIDOS.");
+    public ResponseEntity<String> enviaPedidoLocal() throws InterruptedException {
+        log.info("-----------------------------------------------------------------------------PUB ENVIANDO PEDIDOS.");
         String result = "";
 
         String TOPIC_NAME = "orders";
@@ -38,15 +32,17 @@ public class pubsubInvocationController {
 
         DaprClient client = new DaprClientBuilder().build();
 
-        for (int i = 0; i <= 10; i++) {
-            int orderId = i;
-            Order order = new Order(orderId);
+        for (int i = 0; i < 5; i++) {
+            int pedido = i + 1;
+            String trickyStamp = LocalDateTime.now().getMinute() + "" + LocalDateTime.now().getSecond() + "" + pedido;
+            int trickyStamp2 = Integer.parseInt(trickyStamp.replace(":",""));
+            Order order = new Order(trickyStamp2);
 
             client.publishEvent(PUBSUB_NAME, TOPIC_NAME, order).block();
-            result += "Published order: " + order.getOrderId() + " ------ ";
-            TimeUnit.MILLISECONDS.sleep(200);
+            log.info("-------------------------------------------------------------PUBLISHED ORDER ID: " + trickyStamp);
+            result += "Published order id: " + trickyStamp + " ------ ";
+            TimeUnit.MILLISECONDS.sleep(100);
         }
-
 
         ResponseEntity response = new ResponseEntity<>(result, HttpStatus.OK);
         return response;

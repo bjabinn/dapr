@@ -1,4 +1,0 @@
-#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
-#Wed Jul 05 23:45:59 CEST 2023
-http\://c-nexus-ui.maiapre.servihabitat.com/repository/maia/.error=Could not transfer artifact org.springframework.boot\:spring-boot-starter-parent\:pom\:2.7.8 from/to nexus-maia (http\://c-nexus-ui.maiapre.servihabitat.com/repository/maia/)\: transfer failed for http\://c-nexus-ui.maiapre.servihabitat.com/repository/maia/org/springframework/boot/spring-boot-starter-parent/2.7.8/spring-boot-starter-parent-2.7.8.pom
-f0fb981fd8d157164b2aaf05b36e931fa4c80ba7@default-nexus-maia-http\://c-nexus-ui.maiapre.servihabitat.com/repository/maia/.lastUpdated=1688593559408

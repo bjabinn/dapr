@@ -1,5 +1,5 @@
 mvn clean install -DskipTests && dapr run --app-id secrets-management --resources-path .\components -- java -jar target\dapr-secret-management-0.0.1-SNAPSHOT.jar
-
+dapr dashboard -p 9000
 
 Bibliografia:
 https://github.com/dapr/quickstarts/tree/master/secrets_management/java/sdk

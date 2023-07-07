@@ -1,4 +1,4 @@
-mvn clean install -DskipTests && dapr run --app-id procesa-pedidos-sub --resources-path ./components -- java -jar target/dapr-pub_sub-procesaPedidos-0.0.1-SNAPSHOT.jar
+mvn clean install -DskipTests && dapr run --app-port 8080 --app-id procesa-pedidos-sub --resources-path ./components -- java -jar target\dapr-pub_sub_recibePedidos-0.0.1-SNAPSHOT.jar
 
 
 Bibliografia:
